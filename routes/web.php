@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'DashboardController@index')->name('index');
+// Route::get('/', 'DashboardController@index')->name('index');
+Route::get('/', function () {
+    return "Site is working";
+});
