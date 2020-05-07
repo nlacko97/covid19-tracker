@@ -10,6 +10,7 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 
 // Import Custom SB Admin 2 Mixins and Components
 @import "mixins.scss";
@@ -25,4 +26,3 @@
 @import "login.scss";
 @import "error.scss";
 @import "footer.scss";
-

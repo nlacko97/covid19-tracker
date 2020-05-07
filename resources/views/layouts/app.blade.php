@@ -9,7 +9,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>COVID-19 Romania Tracker</title>
+    <title>{{ config('app.name') }}</title>
+
+    @if (config('app.env') == 'production')
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165271160-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-165271160-1');
+    </script>
+    @endif
 
     <!-- Custom fonts for this template-->
     <link
@@ -33,10 +45,23 @@
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
+            <div id="content" class="mb-2">
+                <nav class="navbar navbar-expand navbar-light bg-grey-200 topbar static-top shadow">
 
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <ul class="navbar-nav ml-auto mr-auto">
+                        <li class="nav-item">
+                            <p class="h6 font-weight-bold mt-2 text-uppercase">
+                                Tracking the current state and progression of the <span class="text-info">COVID-19</span> virus
+                            </p>
+                        </li>
+                    </ul>
+                </nav>
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" class="bg-primary">
                     <div class="row">
                         <div class="col-md-1 col-sm-1"></div>
                         <div class="col-md-10 col-sm-10">

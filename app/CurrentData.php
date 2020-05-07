@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class CurrentData extends Model
 {
     protected $fillable = [
-        'infected', 'tested', 'recovered', 'deceased', 'country', 'last_updated_at_source', 'source_url'
+        'confirmed', 'recovered', 'deaths', 'new_confirmed', 'new_recovered',
+        'new_deaths', 'country', 'country_code', 'slug', 'last_update'
     ];
 
     protected $casts = [
-        'last_updated_at_source' => 'datetime'
+        'last_update' => 'datetime'
     ];
 }

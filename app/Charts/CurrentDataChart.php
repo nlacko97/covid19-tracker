@@ -18,16 +18,14 @@ class CurrentDataChart extends Chart
         parent::__construct();
         $this->currentData = $currentData;
         
-        $this->labels(['Infected', 'Recovered', 'Deceased']);
+        $this->labels(['Confirmed cases', 'Recovered', 'Deaths']);
         $dataset = [
-            $this->currentData->infected,
-            // $this->currentData->tested,
+            $this->currentData->confirmed,
             $this->currentData->recovered,
-            $this->currentData->deceased,
+            $this->currentData->deaths,
         ];
         $this->dataset('', 'bar', $dataset)->options([
-
-            'backgroundColor' => ['#db948a', '#8adbb4', '#8aaedb']
+            'backgroundColor' => ['#258EA6', '#549F93', 'rgb(232, 153, 74)']
         ]);
         $this->displayAxes(false);
         $this->displayLegend(false);
