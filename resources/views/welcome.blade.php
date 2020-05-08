@@ -1,51 +1,272 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12">
         <div class="card shadow">
             <div class="card-header">
-                <h6 class="font-weight-bold text-primary">
-                    What is this
-                </h6>
+                <h6 class="font-weight-bold text-primary mt-1">About this project</h6>
             </div>
             <div class="card-body">
-                <p>
-                    This is a perfectly feasible explanation
+                <div class="row">
+                    <div class="col-md-8">
+                        <p>
+                            This website has been independently developed for personal purposes to track and visualize
+                            current and historic data of the <span class="font-weight-bold">COVID-19</span> pandemic
+                            throughout the world starting at the
+                            beginning
+                            of the year 2020. The data source is linked below. The data on this website shouldn't be
+                            used for professional analysis or medical advice. <br>
+                            Data is refreshed twice every day.
+                            <hr>
+                            This project is open-source and contributions are welcome. <br>
+                            You can support this project by buying me a coffee by clicking on the link below. <br>
+                            Data source: <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">Johns
+                                Hopkins
+                                CSSE</a><br>
+                            You can find me on: <a href="https://github.com/nlacko97/covid19-tracker"><i
+                                    class="fab fa-github"></i></a> <a
+                                href="https://www.linkedin.com/in/l%C3%A1szl%C3%B3-nagy-314583151/"><i
+                                    class="fab fa-linkedin"></i></a> <br>
+                        </p>
+                        <div style="bottom: 0;">
+                            <style>
+                                .bmc-button img {
+                                    height: 25px !important;
+                                    width: 30px !important;
+                                    margin-bottom: 1px !important;
+                                    box-shadow: none !important;
+                                    border: none !important;
+                                    vertical-align: middle !important;
+                                }
+
+                                .bmc-button {
+                                    padding: 7px 10px 7px 10px !important;
+                                    line-height: 35px !important;
+                                    height: 51px !important;
+                                    min-width: 217px !important;
+                                    text-decoration: none !important;
+                                    display: inline-flex !important;
+                                    color: #ffffff !important;
+                                    background-color: #79D6B5 !important;
+                                    border-radius: 5px !important;
+                                    border: 1px solid transparent !important;
+                                    padding: 7px 10px 7px 10px !important;
+                                    font-size: 12px !important;
+                                    letter-spacing: -0.08px !important;
+                                    box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;
+                                    -webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                                    margin: 0 auto !important;
+                                    font-family: 'Lato', sans-serif !important;
+                                    -webkit-box-sizing: border-box !important;
+                                    box-sizing: border-box !important;
+                                    -o-transition: 0.3s all linear !important;
+                                    -webkit-transition: 0.3s all linear !important;
+                                    -moz-transition: 0.3s all linear !important;
+                                    -ms-transition: 0.3s all linear !important;
+                                    transition: 0.3s all linear !important;
+                                }
+
+                                .bmc-button:hover,
+                                .bmc-button:active,
+                                .bmc-button:focus {
+                                    -webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                                    text-decoration: none !important;
+                                    box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                                    opacity: 0.85 !important;
+                                    color: #ffffff !important;
+                                }
+                            </style>
+                            <link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext"
+                                rel="stylesheet"><a class="bmc-button" target="_blank"
+                                href="https://www.buymeacoffee.com/nagylaszlo"><img
+                                    src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"
+                                    alt="Buy me a coffee"><span style="margin-left:15px;font-size:19px !important;">Buy
+                                    me a coffee</span></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="{{ asset('assets/visual_data.svg') }}" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if ($country)
+<div class="row mt-2">
+    <div class="col-md-6 col-sm-12">
+        <div class="card shadow h-100">
+            <div class="card-body">
+                <div class="row">
+                    @php
+                    $first = $country->dayReports()->orderBy('date', 'desc')->first();
+                    $second = $country->dayReports()->orderBy('date', 'desc')->get()->values()->get(1);
+                    @endphp
+                    <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
+                        <i class="fa fa-virus mb-2"></i>
+                        <p class="h4 text-info">{{ $first ? number_format($first->confirmed, 0, ".", ",") : 0 }}</p>
+                        <p class="mb-0">Confirmed</p>
+                        <p class="text-s text-info mt-0">
+                            +{{ $first->confirmed - $second->confirmed }}
+                        </p>
+                    </div>
+                    <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
+                        <i class="fa fa-disease mb-2"></i>
+                        <p class="h4 text-danger">{{ $first ? number_format($first->deaths, 0, ".", ",") : 0 }}</p>
+                        <p class="mb-0">Deaths</p>
+                        <p class="text-s text-danger mt-0">
+                            +{{ $first->deaths - $second->deaths }}
+                        </p>
+                    </div>
+                    <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
+                        <i class="fa fa-hand-holding-medical mb-2"></i>
+                        <p class="h4 text-success">{{ $first ? number_format($first->recovered, 0, ".", ",") : 0 }}</p>
+                        <p class="mb-0">Recovered</p>
+                        <p class="text-s text-success mt-0">
+                            +{{ $first->recovered - $second->recovered }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex flex-row justify-content-center align-items-center">
+                <p class="mb-0">
+                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
+                        style="width: 25px;">
+                    {{ $country->name }} overview
                 </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card shadow h-100">
+            @php
+            $fatality_rate = $first ? (float)number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : 0;
+            @endphp
+            <div class="card-body">
+                <div class="progress mx-auto" data-value='{{ $fatality_rate }}'>
+                    <span class="progress-left">
+                        <span class="progress-bar border-danger"></span>
+                    </span>
+                    <span class="progress-right">
+                        <span class="progress-bar border-danger"></span>
+                    </span>
+                    <div
+                        class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                        <div class="h6 font-weight-bold">{{ $fatality_rate }}<span class="small text-grey-200">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex flex-row justify-content-center">
+                Fatality rate
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card shadow bg-gradient-grey h-100">
+            @php
+            $recovery_rate = $first ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") :
+            0;
+            @endphp
+            <div class="card-body">
+                <div class="progress mx-auto" data-value='{{ $recovery_rate }}'>
+                    <span class="progress-left">
+                        <span class="progress-bar border-success"></span>
+                    </span>
+                    <span class="progress-right">
+                        <span class="progress-bar border-success"></span>
+                    </span>
+                    <div
+                        class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                        <div class="h6 font-weight-bold">{{ $recovery_rate }}<span class="small text-grey-200">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex flex-row justify-content-center">
+                Recovery rate
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-md-6 col-sm-12">
+        <div class="card shadow">
+            {{-- <div class="card-header">
+                <h6 class="font-weight-bold text-primary">
+                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
+            style="width: 25px;">
+            {{ $country->name }} daily trends
+            </h6>
+        </div> --}}
+        <div class="card-body">
+            {!! $currentChart->container() !!}
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-12">
+    <div class="card shadow">
+        {{-- <div class="card-header">
+                <h6 class="font-weight-bold text-primary">
+                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
+        style="width: 25px;">
+        {{ $country->name }} historic stats
+        </h6>
+    </div> --}}
+    <div class="card-body">
+        {!! $historicChart->container() !!}
+    </div>
+</div>
+</div>
+</div>
+@endif
+<div class="row mt-2">
+    <div class="col-md-8 col-sm-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="font-weight-bold text-primary mt-1">
+                    Global stats
+                </h6>
+            </div>
+            <div class="card-body table-responsive">
                 <table class="table table-borderless table-hover" id="countriestable">
                     <thead>
-                        <th>Flag</th>
-                        <th>Name</th>
+                        <th>Country</th>
                         <th>Confirmed</th>
                         <th>Deaths</th>
                         <th>Recovered</th>
-                        <th>Population</th>
+                        <th><i class="fa fa-disease"></i></th>
+                        <th><i class="fa fa-hand-holding-medical"></i></th>
                     </thead>
                     <tbody>
-                        @foreach ($countries as $country)
+                        @foreach ($countries as $c)
                         <tr>
-                            <td><img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png"
-                                    class="img-fluid mr-3" style="width: 25px;"></td>
-                            <td>{{ $country->name }}</td>
+                            <td>
+                                <img src="https://www.countryflags.io/{{ $c->iso2 }}/flat/24.png" class="img-fluid mr-3"
+                                    style="width: 25px;">
+                                <a href="{{ route('index', $c) }}">
+                                    {{ $c->name }}
+                                </a>
+                            </td>
                             @php
-                                $first = $country->dayReports->sortByDesc('date')->first();
+                            $first = $c->dayReports()->orderBy('date', 'desc')->first();
                             @endphp
-                            <td>{{  $first ? number_format($first->confirmed, 0, ".", ",") : '0'  }}</td>
+                            <td>
+                                {{  $first ? number_format($first->confirmed, 0, ".", ",") : '0'  }}
+                            </td>
                             <td>
                                 {{  $first ? number_format($first->deaths, 0, ".", ",") : '0'  }}
-                                <span class="text-xs text-danger">
-                                    {{ $first ? number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
-                                </span>
                             </td>
                             <td>
                                 {{  $first ? number_format($first->recovered, 0, ".", ",") : '0'  }}
-                                <span class="text-xs text-success">
-                                    {{ $first ? number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
-                                </span>
                             </td>
-                            <td>{{ number_format($country->population, 0, ".", ",") }}</td>
+                            <td class="text-danger">
+                                {{ $first ? (float)number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
+                            </td>
+                            <td class="text-success">
+                                {{ $first ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -53,151 +274,17 @@
             </div>
         </div>
     </div>
-</div>
-
-{{-- <div class="row mt-2">
-    <div class="col-lg-4 col-md-12">
-        <div class="card shadow mt-1">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-s font-weight-bold text-info mb-1">Total cases:
-                            {{ number_format($globalData['TotalConfirmed'], 0, ".", ",") }}</div>
-<div class="h6 mb-0 font-weight-bold text-gray-800">
-    {{ number_format($globalData['NewConfirmed'], 0, ".", ",") }} since yesterday
-</div>
-</div>
-<div class="col-auto">
-    <i class="fa fa-virus text-grey-300"></i>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-lg-4 col-md-12">
-    <div class="card shadow mt-1">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-s font-weight-bold text-success mb-1">Recovered:
-                        {{ number_format($globalData['TotalRecovered'], 0, ".", ",") }}</div>
-                    <div class="h6 mb-0 font-weight-bold text-gray-800">
-                        {{ number_format($globalData['NewRecovered'], 0, ".", ",") }} since yesterday
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fa fa-hand-holding-medical text-grey-300"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-lg-4 col-md-12">
-    <div class="card shadow mt-1">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-s font-weight-bold text-warning mb-1">Deaths:
-                        {{ number_format($globalData['TotalDeaths'], 0, ".", ",") }}</div>
-                    <div class="h6 mb-0 font-weight-bold text-gray-800">
-                        {{ number_format($globalData['NewDeaths'], 0, ".", ",") }} since yesterday
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <i class="fa fa-disease text-grey-300"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="row mt-2">
-    <div class="col-12">
-        <div class="card shadow">
-            <div class="card-header d-flex d-row justify-content-between">
-                <h6 class="font-weight-bold text-primary">Countries</h6>
-                <div class="text-grey-200 text-s">
-                    Last updated: {{ (new Carbon\Carbon($countriesData[1]['Date']))->format('d M Y - H:i') }}
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="countriestable">
-                        <thead>
-                            <th>Flag</th>
-                            <th>Country</th>
-                            <th>Confirmed cases</th>
-                            <th>Deaths</th>
-                            <th>Recovered</th>
-                            <th>Death %</th>
-                            <th>Recovered %</th>
-                        </thead>
-                        <tbody>
-                            @foreach ($countriesData as $countryData)
-                            <tr>
-                                <td>
-                                    <img
-                                        src="https://www.countryflags.io/{{ $countryData['CountryCode'] }}/flat/24.png">
-                                </td>
-                                <td>
-                                    <a href="{{ route('index', ['country' => $countryData['Slug']]) }}">
-                                        {{ $countryData['Country'] }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ number_format($countryData['TotalConfirmed'], 0, ".", ",") }}
-                                </td>
-                                <td>
-                                    {{ number_format($countryData['TotalDeaths'], 0, ".", ",") }}
-                                </td>
-                                <td>
-                                    {{ number_format($countryData['TotalRecovered'], 0, ".", ",") }}
-                                </td>
-                                <td>
-                                    <p class="text-danger">
-                                        {{ $countryData['TotalConfirmed'] ?  number_format(($countryData['TotalDeaths'] * 100 ) / $countryData['TotalConfirmed'], 2, ".", ",") : 0 }}
-                                        %
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="text-success">
-                                        {{ $countryData['TotalConfirmed'] ?  number_format(($countryData['TotalRecovered'] * 100 ) / $countryData['TotalConfirmed'], 2, ".", ",") : 0 }}
-                                        %
-                                    </p>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-2">
-    <div class="col-md-6 col-sm-12">
-        <div class="card shadow border-top-primary h-100">
-            <div class="card-header">
-                <h6 class="font-weight-bold text-primary pt-1">
-                    <img src="https://www.countryflags.io/{{ $currentData->country_code }}/flat/24.png"
-                        class="img-fluid mr-3" style="width: 25px;">
-                    {{ $currentData->country }} current stats
-                </h6>
-            </div>
-            <div class="card-body">
-                <div>
-                    {!! $currentDataChart->container() !!}
-                </div>
-                <div class="card shadow mt-3">
+    <div class="col-md-4 col-sm-12 h-100">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-bottom-info shadow mt-1">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-s font-weight-bold text-info mb-1">Confirmed cases:
-                                    {{ number_format($currentData->confirmed, 0, ".", ",") }}</div>
+                                <div class="text-s font-weight-bold text-info mb-1">Total cases:
+                                    {{ number_format($globalData->confirmed, 0, ".", ",") }}</div>
                                 <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    + {{ number_format($currentData->new_confirmed, 0, ".", ",") }} since yesterday
+                                    {{ number_format($globalData->new_confirmed, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -206,14 +293,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow mt-3">
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <div class="card border-bottom-success shadow mt-1 w-100">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-s font-weight-bold text-success mb-1">Recovered:
-                                    {{ number_format($currentData->recovered, 0, ".", ",") }}</div>
+                                    {{ number_format($globalData->recovered, 0, ".", ",") }}</div>
                                 <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    + {{ number_format($currentData->new_recovered, 0, ".", ",") }} since yesterday
+                                    {{ number_format($globalData->new_recovered, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -222,14 +313,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow mt-3">
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <div class="card border-bottom-warning shadow mt-1 w-100">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-s font-weight-bold text-warning mb-1">Deaths:
-                                    {{ number_format($currentData->deaths, 0, ".", ",") }}</div>
+                                    {{ number_format($globalData->deaths, 0, ".", ",") }}</div>
                                 <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    + {{ number_format($currentData->new_deaths, 0, ".", ",") }} since yesterday
+                                    {{ number_format($globalData->new_deaths, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -238,47 +333,44 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-borderless w-100 mt-3">
-                    <tbody>
-                        <tr style="border-top: 1px solid black;">
-                            <th>Last update</th>
-                            <td class="float-right">
-                                {{ $currentData->last_update->format('d M Y - H:i') }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <div class="card shadow h-100">
-            <div class="card-header">
-                <h6 class="font-weight-bold text-primary">
-                    <img src="https://www.countryflags.io/{{ $currentData->country_code }}/flat/24.png"
-                        class="img-fluid mr-3" style="width: 25px;">
-                    {{ $currentData->country }} historic data since day one
-                </h6>
-            </div>
-            <div class="card-body">
-                <div>
-                    {!! $historicDataChart->container() !!}
+        <div class="row mt-1 h-100">
+            <div class="col-12">
+                <div class="card shadow border-bottom-secondary mt-1 h-100">
+                    <div class="card-body">
+                        <p class="text-s text-primary font-weight-bold">
+                            <i class="fa fa-info-circle text-xs text-primary"></i>
+                            Click on the country name to view detailed statistics and graphs.
+                        </p>
+                        <p class="text-s text-primary">
+                            <i class="fa fa-info-circle text-xs text-primary"></i>
+                            The table can be sorted alphabetically by country name or ascending/descending by the other
+                            columns.
+                        </p>
+                        <p class="text-s text-primary">
+                            <i class="fa fa-info-circle text-xs text-primary"></i>
+                            Active cases are calculated by subtracting deaths and recovered cases from the total
+                            confirmed cases.
+                        </p>
+                        <p class="text-s text-primary">
+                            <i class="fa fa-info-circle text-xs text-primary"></i>
+                            Some innacuracies may appear in the data, especially because some countries like the UK are
+                            not reporting recovered cases regularly or at all. This certianly doesn't mean that no one
+                            has recovered in those areas.
+                        </p>
+                    </div>
                 </div>
-                <p class="text-grey-300 mt-3 border-top-grey">
-                    The upper graph shows the progression of the virus in the country since it first appeared. Some
-                    irregularities may appear in the data as it is not always complete. The <b>Active cases</b> are
-                    calculated by subtracting the recovered and deceased cases from the confirmed cases and this line
-                    represents the best the actual state of the virus in the country, provided that the data is
-                    complete.
-                </p>
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 @endsection
 
 @section('js')
-{{-- {!! $currentDataChart->script() !!}
-{!! $historicDataChart->script() !!} --}}
+@if ($country)
+{!! $currentChart->script() !!}
+{!! $historicChart->script() !!}
+@endif
 @endsection

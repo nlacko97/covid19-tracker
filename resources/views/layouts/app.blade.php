@@ -55,13 +55,20 @@
                     <ul class="navbar-nav ml-auto mr-auto">
                         <li class="nav-item">
                             <p class="h6 font-weight-bold mt-2 text-uppercase">
-                                Tracking the current state and progression of the <span class="text-info">COVID-19</span> virus
+                                Tracking the current state and progression of the <span
+                                    class="text-primary">COVID-19</span> virus
                             </p>
                         </li>
+                        <li class="nav-item position-absolute mr-3" style="right: 0;">
+                            <a href="https://github.com/nlacko97/covid19-tracker" target="_blank"><i
+                                    class="fab fa-github"></i></a>
+                        </li>
                     </ul>
+                    {{-- <ul class="navbar-nav ml-auto">
+                    </ul> --}}
                 </nav>
                 <!-- Begin Page Content -->
-                <div class="container-fluid" class="bg-primary">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-1 col-sm-1"></div>
                         <div class="col-md-10 col-sm-10">

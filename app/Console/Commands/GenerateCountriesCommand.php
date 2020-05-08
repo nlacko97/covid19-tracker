@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Country;
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -56,8 +57,10 @@ class GenerateCountriesCommand extends Command
         });
         $countries_to_insert = collect();
         $countries->each(function ($item) use ($countries_to_insert) {
+            $name = $item['Province_State'] ? $item['Province_State'] : $item['Country_Region'];
             $countries_to_insert->push(new Country([
-                'name' => $item['Province_State'] ? $item['Province_State'] : $item['Country_Region'],
+                'name' => $name,
+                'slug' => Str::slug($name),
                 'iso2' => $item['iso2'],
                 'iso3' => $item['iso3'],
                 'lat' => $item['Lat'],

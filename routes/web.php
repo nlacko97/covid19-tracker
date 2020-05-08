@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'DashboardController@index')->name('index');
+Route::get('/{country?}', 'DashboardController@index')->name('index');
