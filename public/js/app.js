@@ -86600,10 +86600,23 @@ __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
 __webpack_require__(/*! datatables.net-bs4 */ "./node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js");
 
 $(document).ready(function () {
-  $("#countriestable").DataTable({
+  var table = $("#countriestable").DataTable({
     stateSave: true,
-    "order": [[1, "desc"]]
+    "columnDefs": [{
+      "searchable": false,
+      "orderable": false,
+      "targets": 0
+    }],
+    "order": [[1, 'desc']]
   });
+  table.on('order.dt search.dt', function () {
+    table.column(0, {
+      search: 'applied',
+      order: 'applied'
+    }).nodes().each(function (cell, i) {
+      cell.innerHTML = i + 1;
+    });
+  }).draw();
   $(".progress").each(function () {
     var value = $(this).attr('data-value');
     var left = $(this).find('.progress-left .progress-bar');

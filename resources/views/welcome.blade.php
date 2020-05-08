@@ -232,6 +232,7 @@
             <div class="card-body table-responsive">
                 <table class="table table-borderless table-hover" id="countriestable">
                     <thead>
+                        <th></th>
                         <th>Country</th>
                         <th>Confirmed</th>
                         <th>Deaths</th>
@@ -242,6 +243,7 @@
                     <tbody>
                         @foreach ($countries as $c)
                         <tr>
+                            <td class="text-grey-100"></td>
                             <td>
                                 <img src="https://www.countryflags.io/{{ $c->iso2 }}/flat/24.png" class="img-fluid mr-3"
                                     style="width: 25px;">
