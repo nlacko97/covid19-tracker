@@ -10,7 +10,7 @@ $(document).ready(() => {
             "orderable": false,
             "targets": 0
         } ],
-        "order": [[ 1, 'desc' ]]
+        "order": [[ 2, 'desc' ]]
     });
 
     table.on( 'order.dt search.dt', function () {
@@ -18,6 +18,12 @@ $(document).ready(() => {
             cell.innerHTML = i+1;
         } );
     } ).draw();
+
+    if ($("#countrySummary").length) {
+        $("html, body").animate({
+            scrollTop: $("#countrySummary").offset().top
+        }, 'slow');
+    }
 
     $(".progress").each(function() {
 

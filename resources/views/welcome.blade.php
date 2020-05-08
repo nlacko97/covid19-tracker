@@ -94,10 +94,16 @@
     </div>
 </div>
 @if ($country)
-<div class="row mt-2">
+<div class="row mt-2" id="countrySummary">
     <div class="col-md-6 col-sm-12">
         <div class="card shadow h-100">
             <div class="card-body">
+                <div class="d-flex flex-row justify-content-center mb-4">
+                    <h5>
+                        <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3">
+                        {{ $country->name }} overview
+                    </h5>
+                </div>
                 <div class="row">
                     @php
                     $first = $country->dayReports()->orderBy('date', 'desc')->first();
@@ -112,7 +118,7 @@
                         </p>
                     </div>
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
-                        <i class="fa fa-disease mb-2"></i>
+                        <i class="fa fa-cross mb-2"></i>
                         <p class="h4 text-danger">{{ $first ? number_format($first->deaths, 0, ".", ",") : 0 }}</p>
                         <p class="mb-0">Deaths</p>
                         <p class="text-s text-danger mt-0">
@@ -120,7 +126,7 @@
                         </p>
                     </div>
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
-                        <i class="fa fa-hand-holding-medical mb-2"></i>
+                        <i class="fa fa-hand-holding-water mb-2"></i>
                         <p class="h4 text-success">{{ $first ? number_format($first->recovered, 0, ".", ",") : 0 }}</p>
                         <p class="mb-0">Recovered</p>
                         <p class="text-s text-success mt-0">
@@ -129,13 +135,9 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer d-flex flex-row justify-content-center align-items-center">
-                <p class="mb-0">
-                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
-                        style="width: 25px;">
-                    {{ $country->name }} overview
-                </p>
-            </div>
+            {{-- <div class="card-footer d-flex flex-row justify-content-center align-items-center">
+                
+            </div> --}}
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
@@ -153,7 +155,7 @@
                     </span>
                     <div
                         class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
-                        <div class="h6 font-weight-bold">{{ $fatality_rate }}<span class="small text-grey-200">%</span>
+                        <div class="h6 font-weight-bold">{{ $fatality_rate }}<span class="small text-gray-600">%</span>
                         </div>
                     </div>
                 </div>
@@ -164,7 +166,7 @@
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
-        <div class="card shadow bg-gradient-grey h-100">
+        <div class="card shadow h-100">
             @php
             $recovery_rate = $first ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") :
             0;
@@ -179,7 +181,7 @@
                     </span>
                     <div
                         class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
-                        <div class="h6 font-weight-bold">{{ $recovery_rate }}<span class="small text-grey-200">%</span>
+                        <div class="h6 font-weight-bold">{{ $recovery_rate }}<span class="small text-gray-600">%</span>
                         </div>
                     </div>
                 </div>
@@ -237,14 +239,14 @@
                         <th>Confirmed</th>
                         <th>Deaths</th>
                         <th>Recovered</th>
-                        <th><i class="fa fa-disease"></i></th>
-                        <th><i class="fa fa-hand-holding-medical"></i></th>
+                        <th><i class="fa fa-cross"></i></th>
+                        <th><i class="fa fa-hand-holding-water"></i></th>
                     </thead>
                     <tbody>
                         @foreach ($countries as $c)
                         <tr>
-                            <td class="text-grey-100"></td>
-                            <td>
+                            <td class="text-gray-500"></td>
+                            <td class="text-nowrap">
                                 <img src="https://www.countryflags.io/{{ $c->iso2 }}/flat/24.png" class="img-fluid mr-3"
                                     style="width: 25px;">
                                 <a href="{{ route('index', $c) }}">
@@ -290,7 +292,7 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fa fa-virus text-grey-300"></i>
+                                <i class="fa fa-virus text-gray-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -310,7 +312,7 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fa fa-hand-holding-medical text-grey-300"></i>
+                                <i class="fa fa-hand-holding-water text-gray-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -330,7 +332,7 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fa fa-disease text-grey-300"></i>
+                                <i class="fa fa-cross text-gray-400 text-l"></i>
                             </div>
                         </div>
                     </div>
