@@ -9,6 +9,7 @@ use App\Charts\HistoricDataChart;
 use App\DayReport;
 use App\GlobalData;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -21,26 +22,36 @@ class DashboardController extends Controller
         if ($country) {
             $historicChart = new HistoricDataChart($country);
             $currentChart = new CurrentDataChart($country);
+            $country->unsetRelation('dayReports');
         }
-        $latest = DayReport::whereDate('date', now()->subDay());
-        $prev = DayReport::whereDate('date', now()->subDays(2));
-        $confirmed = $latest->sum('confirmed');
-        $confirmed_prev = $prev->sum('confirmed');
-        $recovered = $latest->sum('recovered');
-        $recovered_prev = $prev->sum('recovered');
-        $deaths = $latest->sum('deaths');
-        $deaths_prev = $prev->sum('deaths');
+        $countries = Country::withLatestReport()->get();
+        $globalStatsToday = DB::select(DB::raw('select sum(t1.confirmed) as total_confirmed, sum(t1.deaths) as total_deaths, sum(recovered) as total_recovered
+        from day_reports t1
+        where t1.date = (
+            select max(t2.date)
+            from day_reports t2
+            where t2.country_id = t1.country_id
+        )'))[0];
+        $globalStatsYesterday = DB::select(DB::raw('select sum(t1.confirmed) as total_confirmed, sum(t1.deaths) as total_deaths, sum(recovered) as total_recovered
+            from day_reports t1
+            where t1.date = (
+                select max(t2.date)
+                from day_reports t2
+                where t2.country_id = t1.country_id
+                and t2.date < (select max(t3.date) from day_reports t3 where t3.country_id = t2.country_id)
+            )'))[0];
+            // dd($globalStatsToday, $globalStatsYesterday);
         $globalData = new GlobalData([
-            'confirmed' => $confirmed,
-            'new_confirmed' => $confirmed - $confirmed_prev,
-            'recovered' => $recovered,
-            'new_recovered' => $recovered - $recovered_prev,
-            'deaths' => $deaths,
-            'new_deaths' => $deaths - $deaths_prev
+            'confirmed' => $globalStatsToday->total_confirmed,
+            'new_confirmed' => $globalStatsToday->total_confirmed - $globalStatsYesterday->total_confirmed,
+            'recovered' => $globalStatsToday->total_recovered,
+            'new_recovered' => $globalStatsToday->total_recovered - $globalStatsYesterday->total_recovered,
+            'deaths' => $globalStatsToday->total_deaths,
+            'new_deaths' => $globalStatsToday->total_deaths - $globalStatsYesterday->total_deaths,
         ]);
         if ($country) {
             return view('welcome', [
-                'countries' => Country::all(),
+                'countries' => $countries,
                 'globalData' => $globalData,
                 'country' => $country,
                 'currentChart' => $currentChart,
@@ -48,7 +59,7 @@ class DashboardController extends Controller
             ]);
         } else {
             return view('welcome', [
-                'countries' => Country::all(),
+                'countries' => $countries,
                 'globalData' => $globalData,
                 'country' => $country,
             ]);

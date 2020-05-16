@@ -106,8 +106,13 @@
                 </div>
                 <div class="row">
                     @php
-                    $first = $country->dayReports()->orderBy('date', 'desc')->first();
-                    $second = $country->dayReports()->orderBy('date', 'desc')->get()->values()->get(1);
+                    // $first = $country->dayReports()->orderBy('date', 'desc')->first();
+                    // $second = $country->dayReports()->orderBy('date', 'desc')->get()->values()->get(1);
+                    $first = $country->dayReports->sortByDesc('date')->first();
+                    $second = $country->dayReports->sortByDesc('date')->skip(1)->first();
+                    // $first = $country->latestReport;
+                    // $second = $country->secondLatestReport;
+                    // dd($first, $second)
                     @endphp
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
                         <i class="fa fa-virus mb-2"></i>
@@ -225,7 +230,7 @@
 @endif
 <div class="row mt-2">
     <div class="col-md-8 col-sm-12">
-        <div class="card shadow">
+        <div class="card shadow border-bottom-secondary h-100">
             <div class="card-header">
                 <h6 class="font-weight-bold text-primary mt-1">
                     Global stats
@@ -254,7 +259,7 @@
                                 </a>
                             </td>
                             @php
-                            $first = $c->dayReports()->orderBy('date', 'desc')->first();
+                            $first = $c->latestReport;
                             @endphp
                             <td>
                                 {{  $first ? number_format($first->confirmed, 0, ".", ",") : '0'  }}
@@ -281,13 +286,14 @@
     <div class="col-md-4 col-sm-12 h-100">
         <div class="row">
             <div class="col-12">
-                <div class="card border-bottom-info shadow mt-1">
+                <div class="card border-bottom-info shadow mt-sm-1">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-s font-weight-bold text-info mb-1">Total cases:
+                                <div class="text-s font-weight-bold text-info mb-1"><i class="fa fa-globe-americas"></i>
+                                    Total cases:
                                     {{ number_format($globalData->confirmed, 0, ".", ",") }}</div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                <div class="h6 mb-0 font-weight-bold text-gray-500">
                                     {{ number_format($globalData->new_confirmed, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>
@@ -305,9 +311,10 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-s font-weight-bold text-success mb-1">Recovered:
+                                <div class="text-s font-weight-bold text-success mb-1"><i
+                                        class="fa fa-globe-americas"></i> Recovered:
                                     {{ number_format($globalData->recovered, 0, ".", ",") }}</div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                <div class="h6 mb-0 font-weight-bold text-gray-500">
                                     {{ number_format($globalData->new_recovered, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>
@@ -325,9 +332,10 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-s font-weight-bold text-warning mb-1">Deaths:
+                                <div class="text-s font-weight-bold text-warning mb-1"><i
+                                        class="fa fa-globe-americas"></i> Deaths:
                                     {{ number_format($globalData->deaths, 0, ".", ",") }}</div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                <div class="h6 mb-0 font-weight-bold text-gray-500">
                                     {{ number_format($globalData->new_deaths, 0, ".", ",") }} since yesterday
                                 </div>
                             </div>

@@ -34,6 +34,10 @@ class GenerateDayReportsJob implements ShouldQueue
      */
     public function handle()
     {
+        if (config('app.env') == 'production') {
+            $start_time = microtime(true);
+            Log::info('Entering GenereateDayReportsJob. Started generating reports');
+        }
         DayReport::truncate();
         $confirmed = $this->getKeyedCsvResponse('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
         $confirmed = $this->getAggregatedData($confirmed);
@@ -84,6 +88,10 @@ class GenerateDayReportsJob implements ShouldQueue
                 }
             }
         });
+        if (config('app.env') == 'production') {
+            $end_time = microtime(true);
+            Log::info('Finished generating reports in: ' . number_format($end_time - $start_time, 2, ".", "") . ' seconds. Exiting job');
+        }
     }
 
     private function getKeyedCsvResponse($url)
