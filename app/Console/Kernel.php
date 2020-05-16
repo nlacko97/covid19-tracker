@@ -25,13 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->job(new GenerateDayReportsJob)
-            ->timezone('Europe/Bucharest')
-            ->dailyAt('01:30');
-        $schedule->call(function () {
-            \Log::info('testing scheduler');
-        })->dailyAt('12:47')->timezone('Europe/Bucharest');
+            ->dailyAt('04:30')
+            ->timezone('Europe/Bucharest');
     }
 
     /**
