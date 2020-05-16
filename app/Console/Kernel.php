@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\GenerateDayReportsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +26,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->job(new GenerateDayReportsJob)
+            ->timezone('Europe/Bucharest')
+            ->dailyAt('01:30');
+        $schedule->call(function () {
+            \Log::info('testing scheduler');
+        })->dailyAt('12:47')->timezone('Europe/Bucharest');
     }
 
     /**
@@ -34,7 +41,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
