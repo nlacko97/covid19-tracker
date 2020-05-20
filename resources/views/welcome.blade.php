@@ -112,14 +112,16 @@
                     $second = $country->dayReports->sortByDesc('date')->skip(1)->first();
                     // $first = $country->latestReport;
                     // $second = $country->secondLatestReport;
-                    // dd($first, $second)
                     @endphp
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
                         <i class="fa fa-virus mb-2"></i>
                         <p class="h4 text-info">{{ $first ? number_format($first->confirmed, 0, ".", ",") : 0 }}</p>
                         <p class="mb-0">Confirmed</p>
                         <p class="text-s text-info mt-0">
-                            +{{ $first->confirmed - $second->confirmed }}
+                            @php
+                            $value = $first && $second ? $first->confirmed - $second->confirmed : 0;
+                            @endphp
+                            {{ $value >= 0 ? '+' : '-' }}{{ number_format(abs($value), 0, ".", ",") }}
                         </p>
                     </div>
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
@@ -127,7 +129,10 @@
                         <p class="h4 text-danger">{{ $first ? number_format($first->deaths, 0, ".", ",") : 0 }}</p>
                         <p class="mb-0">Deaths</p>
                         <p class="text-s text-danger mt-0">
-                            +{{ $first->deaths - $second->deaths }}
+                            @php
+                            $value = $first && $second ? $first->deaths - $second->deaths : 0;
+                            @endphp
+                            {{ $value >= 0 ? '+' : '-' }}{{ number_format(abs($value), 0, ".", ",") }}
                         </p>
                     </div>
                     <div class="col-4 d-flex flex-column justify-content-center align-items-center" style="bottom: 0;">
@@ -135,7 +140,10 @@
                         <p class="h4 text-success">{{ $first ? number_format($first->recovered, 0, ".", ",") : 0 }}</p>
                         <p class="mb-0">Recovered</p>
                         <p class="text-s text-success mt-0">
-                            +{{ $first->recovered - $second->recovered }}
+                            @php
+                            $value = $first && $second ? $first->recovered - $second->recovered : 0;
+                            @endphp
+                            {{ $value >= 0 ? '+' : '-' }}{{ number_format(abs($value), 0, ".", ",") }}
                         </p>
                     </div>
                 </div>
@@ -148,7 +156,8 @@
     <div class="col-md-3 col-sm-12">
         <div class="card shadow h-100">
             @php
-            $fatality_rate = $first ? (float)number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : 0;
+            $fatality_rate = $first && $first->confirmed ? (float)number_format($first->deaths * 100 /
+            $first->confirmed, 2, ".", ",") : 0;
             @endphp
             <div class="card-body">
                 <div class="progress mx-auto" data-value='{{ $fatality_rate }}'>
@@ -173,7 +182,8 @@
     <div class="col-md-3 col-sm-12">
         <div class="card shadow h-100">
             @php
-            $recovery_rate = $first ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") :
+            $recovery_rate = $first && $first->confirmed ? (float)number_format($first->recovered * 100 /
+            $first->confirmed, 2, ".", ",") :
             0;
             @endphp
             <div class="card-body">
@@ -200,32 +210,18 @@
 <div class="row mt-2">
     <div class="col-md-6 col-sm-12">
         <div class="card shadow">
-            {{-- <div class="card-header">
-                <h6 class="font-weight-bold text-primary">
-                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
-            style="width: 25px;">
-            {{ $country->name }} daily trends
-            </h6>
-        </div> --}}
-        <div class="card-body">
-            {!! $currentChart->container() !!}
+            <div class="card-body">
+                {!! $currentChart->container() !!}
+            </div>
         </div>
     </div>
-</div>
-<div class="col-md-6 col-sm-12">
-    <div class="card shadow">
-        {{-- <div class="card-header">
-                <h6 class="font-weight-bold text-primary">
-                    <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3"
-        style="width: 25px;">
-        {{ $country->name }} historic stats
-        </h6>
-    </div> --}}
-    <div class="card-body">
-        {!! $historicChart->container() !!}
+    <div class="col-md-6 col-sm-12">
+        <div class="card shadow">
+            <div class="card-body">
+                {!! $historicChart->container() !!}
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </div>
 @endif
 <div class="row mt-2">
@@ -271,10 +267,10 @@
                                 {{  $first ? number_format($first->recovered, 0, ".", ",") : '0'  }}
                             </td>
                             <td class="text-danger">
-                                {{ $first ? (float)number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
+                                {{ $first && $first->confirmed ? (float)number_format($first->deaths * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
                             </td>
                             <td class="text-success">
-                                {{ $first ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
+                                {{ $first && $first->confirmed ? (float)number_format($first->recovered * 100 / $first->confirmed, 2, ".", ",") : '0' }}%
                             </td>
                         </tr>
                         @endforeach

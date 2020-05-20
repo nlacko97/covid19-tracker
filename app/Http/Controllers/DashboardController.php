@@ -20,9 +20,9 @@ class DashboardController extends Controller
         SEOTools::metatags()->addKeyword(['corona', 'covid', 'covid-19', 'coronavirus', 'corona stats', 'covid tracker', 'coronavirus stats', 'data', 'data visualization', 'disease', 'virus', 'corona virus', 'tracking', 'open-source']);
         SEOTools::opengraph()->addImage([asset('assets/seo_ss.jpg'), 'size' => 300]);
         if ($country) {
+            $country->load('dayReports');
             $historicChart = new HistoricDataChart($country);
             $currentChart = new CurrentDataChart($country);
-            $country->unsetRelation('dayReports');
         }
         $countries = Country::withLatestReport()->get();
         $globalStatsToday = DB::select(DB::raw('select sum(t1.confirmed) as total_confirmed, sum(t1.deaths) as total_deaths, sum(recovered) as total_recovered

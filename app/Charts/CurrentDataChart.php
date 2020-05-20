@@ -8,45 +8,29 @@ use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 
 class CurrentDataChart extends Chart
 {
-    // protected $currentData;
     protected $country;
+
     /**
      * Initializes the chart.
      *
      * @return void
      */
-    // public function __construct(CurrentData $currentData)
-    // {
-    //     parent::__construct();
-    //     $this->currentData = $currentData;
-
-    //     $this->labels(['Confirmed cases', 'Recovered', 'Deaths']);
-    //     $dataset = [
-    //         $this->currentData->confirmed,
-    //         $this->currentData->recovered,
-    //         $this->currentData->deaths,
-    //     ];
-    //     $this->dataset('', 'bar', $dataset)->options([
-    //         'backgroundColor' => ['#258EA6', '#549F93', 'rgb(232, 153, 74)']
-    //     ]);
-    //     $this->displayAxes(false);
-    //     $this->displayLegend(false);
-    // }
     public function __construct(Country $country)
     {
         parent::__construct();
-        $this->country = $country;
+        $this->country = unserialize(serialize($country));
         $reports = $this->country->dayReports
             ->sortByDesc('date')
             ->take(11)
             ->values();
-        foreach ($reports as $key => $report) {
-            if ($key != count($reports) - 1) {
-                $report->confirmed -= $reports[$key + 1]->confirmed;
-                $report->deaths -= $reports[$key + 1]->deaths;
-                $report->recovered -= $reports[$key + 1]->recovered;
+        $reports = $reports->map(function ($item, $key) use ($reports) {
+            if ($key < count($reports) - 1) {
+                $item->confirmed -= $reports[$key + 1]->confirmed;
+                $item->recovered -= $reports[$key + 1]->recovered;
+                $item->deaths -= $reports[$key + 1]->deaths;
             }
-        }
+            return $item;
+        });
         $reports->pop();
         $reports = $reports->sortBy('date');
         $this->labels($reports->pluck('date')->map(function ($item) {
@@ -70,7 +54,6 @@ class CurrentDataChart extends Chart
                     return '#549F93';
                 })->values(),
             ]);
-        // $this->dataset('yesterday', 'bar', $prev_dataset)->options(['backgroundColor' => ['#258EA6', '#549F93', 'rgb(232, 153, 74)'],]);
         $this->options([
             'tooltips' => [
                 'mode' => 'index'
@@ -92,7 +75,6 @@ class CurrentDataChart extends Chart
                 ],
             ]
         ]);
-        // $this->displayAxes(false);
         $this->displayLegend(false);
         $this->title('Daily cases report for the past 10 days');
     }
