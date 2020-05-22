@@ -26,7 +26,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new GenerateDayReportsJob)
-            ->dailyAt('04:30')
+            ->dailyAt('07:30')
+            ->timezone('Europe/Bucharest');
+
+        $schedule->job(new GenerateDayReportsJob)
+            ->dailyAt('14:30')
             ->timezone('Europe/Bucharest');
     }
 
