@@ -11,6 +11,8 @@ class Country extends Model
         'name', 'iso2', 'iso3', 'lat', 'long', 'population', 'slug'
     ];
 
+    protected $append = ['firstConfirmedDate'];
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -71,5 +73,11 @@ class Country extends Model
             ]
         )
             ->with('latestReport');
+    }
+
+    public function getFirstConfirmedDateAttribute()
+    {
+        $report = $this->dayReports->where('confirmed', '>', 0)->first();
+        return $report ? $report->date : today();
     }
 }

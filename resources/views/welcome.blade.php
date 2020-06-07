@@ -98,11 +98,29 @@
     <div class="col-md-6 col-sm-12">
         <div class="card shadow h-100">
             <div class="card-body">
-                <div class="d-flex flex-row justify-content-center mb-4">
-                    <h5>
-                        <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3">
-                        {{ $country->name }} overview
-                    </h5>
+                <div class="d-none d-md-block d-lg-block d-xl-block">
+                    <div class="d-flex flex-row justify-content-between mb-4">
+                        <h5>
+                            <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3">
+                            {{ $country->name }} overview
+                        </h5>
+                        <p class="text-gray-500">
+                            <b>{{ Carbon\Carbon::now()->diffInDays($country->firstConfirmedDate) }}</b> days since first
+                            confirmed case
+                        </p>
+                    </div>
+                </div>
+                <div class="d-md-none d-lg-none d-xl-none d-xs-block d-sm-block">
+                    <div class="d-flex flex-column align-items-center mb-2">
+                        <h5>
+                            <img src="https://www.countryflags.io/{{ $country->iso2 }}/flat/24.png" class="img-fluid mr-3">
+                            {{ $country->name }} overview
+                        </h5>
+                        <p class="text-gray-500">
+                            <b>{{ Carbon\Carbon::now()->diffInDays($country->firstConfirmedDate) }}</b> days since first
+                            confirmed case
+                        </p>
+                    </div>
                 </div>
                 <div class="row">
                     @php
