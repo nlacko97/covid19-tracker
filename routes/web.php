@@ -14,3 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{country?}', 'DashboardController@index')->name('index');
+
+Route::group(['prefix' => 'testing'], function () {
+    Route::get('select-1', 'TestingController@select1')->name('select1');
+
+    Route::get('insert-1', 'TestingController@insert1')->name('insert1');
+});
